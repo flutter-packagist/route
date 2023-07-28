@@ -10,7 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  get: 4.6.5
   go_router: 10.0.0
+  log_wrapper:
+    path: ../log_wrapper
 
 dev_dependencies:
   flutter_test:
