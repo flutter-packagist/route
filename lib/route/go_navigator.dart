@@ -12,10 +12,8 @@ import 'go_navigator_observer.dart';
 part 'go_navigator_extension.dart';
 
 class GoSetting {
-  final _key = GlobalKey<NavigatorState>(debugLabel: 'Key Created by default');
+  final key = GlobalKey<NavigatorState>(debugLabel: 'Key Created by default');
   final routing = Routing();
-
-  GlobalKey<NavigatorState> get key => _key;
 }
 
 abstract class GoInterface {}

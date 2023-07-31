@@ -260,8 +260,8 @@ extension ExtensionDialog on GoInterface {
   }
 }
 
-extension ExtensionSnackbar on GoInterface {
-  SnackbarController rawSnackbar({
+extension ExtensionSnackBar on GoInterface {
+  SnackbarController rawSnackBar({
     String? title,
     String? message,
     Widget? titleText,
@@ -293,14 +293,14 @@ extension ExtensionSnackbar on GoInterface {
     Curve forwardAnimationCurve = Curves.easeOutCirc,
     Curve reverseAnimationCurve = Curves.easeOutCirc,
     Duration animationDuration = const Duration(seconds: 1),
-    SnackbarStatusCallback? snackbarStatus,
+    SnackbarStatusCallback? snackBarStatus,
     double barBlur = 0.0,
     double overlayBlur = 0.0,
     Color? overlayColor,
     Form? userInputForm,
   }) {
     final getSnackBar = GetSnackBar(
-      snackbarStatus: snackbarStatus,
+      snackbarStatus: snackBarStatus,
       title: title,
       message: message,
       titleText: titleText,
@@ -349,7 +349,7 @@ extension ExtensionSnackbar on GoInterface {
     return controller;
   }
 
-  SnackbarController showSnackbar(GetSnackBar snackbar) {
+  SnackbarController showSnackBar(GetSnackBar snackbar) {
     final controller = SnackbarController(snackbar);
     controller.show();
     return controller;
@@ -392,12 +392,12 @@ extension ExtensionSnackbar on GoInterface {
     Duration? animationDuration,
     double? barBlur,
     double? overlayBlur,
-    SnackbarStatusCallback? snackbarStatus,
+    SnackbarStatusCallback? snackBarStatus,
     Color? overlayColor,
     Form? userInputForm,
   }) {
     final getSnackBar = GetSnackBar(
-        snackbarStatus: snackbarStatus,
+        snackbarStatus: snackBarStatus,
         titleText: titleText ??
             Text(
               title,
@@ -452,7 +452,7 @@ extension ExtensionSnackbar on GoInterface {
     if (instantInit) {
       controller.show();
     } else {
-      //routing.isSnackbar = true;
+      //routing.isSnackBar = true;
       ambiguate(SchedulerBinding.instance)?.addPostFrameCallback((_) {
         controller.show();
       });
@@ -560,34 +560,34 @@ extension GoNavigation on GoInterface {
   /// give name from previous route
   String get previousRoute => routing.previous;
 
-  /// check if snackbar is open
-  bool get isSnackbarOpen =>
-      SnackbarController.isSnackbarBeingShown; //routing.isSnackbar;
+  /// check if snackBar is open
+  bool get isSnackBarOpen =>
+      SnackbarController.isSnackbarBeingShown; //routing.isSnackBar;
 
-  void closeAllSnackbars() {
+  void closeAllSnackBars() {
     SnackbarController.cancelAllSnackbars();
   }
 
-  Future<void> closeCurrentSnackbar() async {
+  Future<void> closeCurrentSnackBar() async {
     await SnackbarController.closeCurrentSnackbar();
   }
 
   /// check if dialog is open
   bool? get isDialogOpen => routing.isDialog;
 
-  /// check if bottomsheet is open
+  /// check if bottomSheet is open
   bool? get isBottomSheetOpen => routing.isBottomSheet;
 
   /// check a raw current route
   Route<dynamic>? get rawRoute => routing.route;
 
-  /// Returns true if a Snackbar, Dialog or BottomSheet is currently OPEN
+  /// Returns true if a SnackBar, Dialog or BottomSheet is currently OPEN
   bool get isOverlaysOpen =>
-      (isSnackbarOpen || isDialogOpen! || isBottomSheetOpen!);
+      (isSnackBarOpen || isDialogOpen! || isBottomSheetOpen!);
 
-  /// Returns true if there is no Snackbar, Dialog or BottomSheet open
+  /// Returns true if there is no SnackBar, Dialog or BottomSheet open
   bool get isOverlaysClosed =>
-      (!isSnackbarOpen && !isDialogOpen! && !isBottomSheetOpen!);
+      (!isSnackBarOpen && !isDialogOpen! && !isBottomSheetOpen!);
 
   /// Get a location from route name and parameters.
   String namedLocation(
@@ -703,10 +703,10 @@ extension GoNavigation on GoInterface {
 
   /// **Navigation.popUntil()** shortcut.<br><br>
   ///
-  /// Pop the current page, snackbar, dialog or bottomsheet in the stack
+  /// Pop the current page, snackbar, dialog or bottomSheet in the stack
   ///
   /// if your set [closeOverlays] to true, Get.back() will close the
-  /// currently open snackbar/dialog/bottomsheet AND the current page
+  /// currently open snackbar/dialog/bottomSheet AND the current page
   ///
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
@@ -719,14 +719,14 @@ extension GoNavigation on GoInterface {
     bool canPop = true,
     int? id,
   }) {
-    if (isSnackbarOpen && !closeOverlays) {
-      closeCurrentSnackbar();
+    if (isSnackBarOpen && !closeOverlays) {
+      closeCurrentSnackBar();
       return;
     }
 
     if (closeOverlays && isOverlaysOpen) {
-      if (isSnackbarOpen) {
-        closeAllSnackbars();
+      if (isSnackBarOpen) {
+        closeCurrentSnackBar();
       }
       navigator?.popUntil((route) {
         return (!isDialogOpen! && !isBottomSheetOpen!);
