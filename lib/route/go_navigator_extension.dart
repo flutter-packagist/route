@@ -601,6 +601,54 @@ extension GoNavigation on GoInterface {
         queryParameters: queryParams,
       );
 
+  Future<T?> to<T>(
+    String location, {
+    Map<String, dynamic> pathParams = const <String, dynamic>{},
+    Map<String, dynamic> queryParams = const <String, dynamic>{},
+    Object? extra,
+  }) {
+    if (GetPlatform.isWeb) {
+      go(
+        location,
+        pathParams: pathParams,
+        queryParams: queryParams,
+        extra: extra,
+      );
+      return Future<T>.value(null);
+    } else {
+      return push<T>(
+        location,
+        pathParams: pathParams,
+        queryParams: queryParams,
+        extra: extra,
+      );
+    }
+  }
+
+  Future<T?> toNamed<T>(
+    String name, {
+    Map<String, String> pathParams = const <String, String>{},
+    Map<String, dynamic> queryParams = const <String, dynamic>{},
+    Object? extra,
+  }) {
+    if (GetPlatform.isWeb) {
+      goNamed(
+        name,
+        pathParams: pathParams,
+        queryParams: queryParams,
+        extra: extra,
+      );
+      return Future<T>.value(null);
+    } else {
+      return pushNamed<T>(
+        name,
+        pathParams: pathParams,
+        queryParams: queryParams,
+        extra: extra,
+      );
+    }
+  }
+
   /// Navigate to a location.
   void go(
     String location, {
@@ -614,7 +662,7 @@ extension GoNavigation on GoInterface {
       }
     });
     queryParams.forEach((key, value) {
-      location = "$location${location.contains("?") ? "" : "?"}$key=$value";
+      location = "$location${location.contains("?") ? "&" : "?"}$key=$value";
     });
     global().go(location, extra: extra);
   }
@@ -634,31 +682,31 @@ extension GoNavigation on GoInterface {
       );
 
   /// Push a location onto the page stack.
-  void push(
+  Future<T?> push<T>(
     String location, {
-    Map<String, dynamic> params = const <String, dynamic>{},
+    Map<String, dynamic> pathParams = const <String, dynamic>{},
     Map<String, dynamic> queryParams = const <String, dynamic>{},
     Object? extra,
   }) {
-    params.forEach((key, value) {
+    pathParams.forEach((key, value) {
       if (location.contains(":$key")) {
         location = location.replaceAll(":$key", value.toString());
       }
     });
     queryParams.forEach((key, value) {
-      location = "$location${location.contains("?") ? "" : "?"}$key=$value";
+      location = "$location${location.contains("?") ? "&" : "?"}$key=$value";
     });
-    global().push(location, extra: extra);
+    return global().push<T>(location, extra: extra);
   }
 
   /// Navigate to a named route onto the page stack.
-  void pushNamed(
+  Future<T?> pushNamed<T>(
     String name, {
     Map<String, String> pathParams = const <String, String>{},
     Map<String, dynamic> queryParams = const <String, dynamic>{},
     Object? extra,
   }) =>
-      global().pushNamed(
+      global().pushNamed<T>(
         name,
         pathParameters: pathParams,
         queryParameters: queryParams,
@@ -761,7 +809,7 @@ extension GoNavigation on GoInterface {
   /// or also like this:
   /// `Get.until((route) => !Get.isDialogOpen())`, to make sure the
   /// dialog is closed
-  void until(RoutePredicate predicate, {int? id}) {
+  void popUntil(RoutePredicate predicate, {int? id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
     return key.currentState?.popUntil(predicate);

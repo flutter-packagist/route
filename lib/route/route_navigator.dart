@@ -53,25 +53,3 @@ class _RouteNavigatorState extends State<RouteNavigator>
     return widget.build(context, _tabController);
   }
 }
-
-/// StatefulShellRoute 简写
-StatefulShellRoute statefulShellRoute({
-  required Widget Function(
-    StatefulNavigationShell navigationShell,
-    List<Widget> children,
-  )
-      containerBuilder,
-  required List<StatefulShellBranch> branches,
-}) {
-  return StatefulShellRoute(
-    builder: (BuildContext context, GoRouterState state,
-        StatefulNavigationShell navigationShell) {
-      return navigationShell;
-    },
-    navigatorContainerBuilder: (BuildContext context,
-        StatefulNavigationShell navigationShell, List<Widget> children) {
-      return containerBuilder(navigationShell, children);
-    },
-    branches: branches,
-  );
-}
