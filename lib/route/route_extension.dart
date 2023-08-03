@@ -18,8 +18,8 @@ GoRoute goRoute({
   GoRouterPageBuilder? pageBuilder;
   if (child != null) {
     pageBuilder = (BuildContext context, GoRouterState state) {
-      passGoArguments(state);
-      return transition(transitionType, state, child);
+      routeArguments(state);
+      return routeTransition(transitionType, state, child);
     };
   }
   List<RouteBase>? routeList = const <RouteBase>[];
@@ -33,18 +33,25 @@ GoRoute goRoute({
 }
 
 /// 使用GO路由进行参数传递
-void passGoArguments(GoRouterState state) {
+void routeArguments(GoRouterState state) {
+  if (state.matchedLocation == Go.currentRoute) return;
   Map<String, dynamic> args = <String, dynamic>{};
   if (state.pathParameters.isNotEmpty) args.addAll(state.pathParameters);
   if (state.uri.queryParameters.isNotEmpty) {
     args.addAll(state.uri.queryParameters);
   }
+  if (state.extra != null &&
+      state.extra is Map<String, dynamic> &&
+      (state.extra as Map<String, dynamic>).isNotEmpty) {
+    args.addAll(state.extra as Map<String, dynamic>);
+  }
   Go.routing.args = args;
-  logV("current route: ${Go.currentRoute}, arguments: $args");
+  if (args.isEmpty) return;
+  logV("PREVIOUS ROUTE: ${Go.currentRoute}, arguments: $args");
 }
 
 /// 路由切换动画
-Page transition(
+Page routeTransition(
   PageTransitionType transitionType,
   GoRouterState state,
   Widget child,
@@ -120,11 +127,7 @@ Page transition(
 
 /// StatefulShellRoute 简写
 StatefulShellRoute statefulShellRoute({
-  required Widget Function(
-    StatefulNavigationShell navigationShell,
-    List<Widget> children,
-  )
-      containerBuilder,
+  required ShellNavigationContainerBuilder navigatorContainerBuilder,
   required List<StatefulShellBranch> branches,
 }) {
   return StatefulShellRoute(
@@ -132,10 +135,7 @@ StatefulShellRoute statefulShellRoute({
         StatefulNavigationShell navigationShell) {
       return navigationShell;
     },
-    navigatorContainerBuilder: (BuildContext context,
-        StatefulNavigationShell navigationShell, List<Widget> children) {
-      return containerBuilder(navigationShell, children);
-    },
+    navigatorContainerBuilder: navigatorContainerBuilder,
     branches: branches,
   );
 }

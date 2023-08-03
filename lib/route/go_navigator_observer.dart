@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/bottomsheet/bottomsheet.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:get/get_navigation/src/router_report.dart';
+import 'package:go_router/go_router.dart';
 import 'package:log_wrapper/log/log.dart';
 
 /// The Navigator observer.
@@ -178,7 +179,8 @@ class _RouteData {
   factory _RouteData.ofRoute(Route? route) {
     return _RouteData(
       name: _extractRouteName(route),
-      isPageRoute: route?.settings is MaterialPage,
+      isPageRoute: route?.settings is MaterialPage ||
+          route?.settings is CustomTransitionPage,
       isDialog: route is GetDialogRoute,
       isBottomSheet: route is GetModalBottomSheetRoute,
     );
@@ -188,15 +190,12 @@ class _RouteData {
 /// Extracts the name of a route based on it's instance type
 /// or null if not possible.
 String? _extractRouteName(Route? route) {
-  if (route?.settings.name != null) {
-    if (route!.settings.name!.isEmpty) {
-      return route.settings.toString();
-    }
-    return route.settings.name;
+  if (route?.settings is CustomTransitionPage) {
+    return _parseRouteSettings(route?.settings);
   }
 
   if (route?.settings is MaterialPage) {
-    return route!.settings.name;
+    return _parseRouteSettings(route?.settings);
   }
 
   if (route is GetDialogRoute) {
@@ -207,5 +206,12 @@ String? _extractRouteName(Route? route) {
     return 'BOTTOMSHEET ${route.hashCode}';
   }
 
-  return route?.settings.toString();
+  return _parseRouteSettings(route?.settings);
+}
+
+String _parseRouteSettings(RouteSettings? routeSettings) {
+  if (routeSettings?.name != null && routeSettings!.name!.isNotEmpty) {
+    return routeSettings.name!;
+  }
+  return routeSettings?.toString() ?? '';
 }

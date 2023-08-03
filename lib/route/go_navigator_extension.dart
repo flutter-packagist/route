@@ -605,14 +605,14 @@ extension GoNavigation on GoInterface {
     String location, {
     Map<String, dynamic> pathParams = const <String, dynamic>{},
     Map<String, dynamic> queryParams = const <String, dynamic>{},
-    Object? extra,
+    Map<String, dynamic> params = const <String, dynamic>{},
   }) {
     if (GetPlatform.isWeb) {
       go(
         location,
         pathParams: pathParams,
         queryParams: queryParams,
-        extra: extra,
+        params: params,
       );
       return Future<T>.value(null);
     } else {
@@ -620,7 +620,7 @@ extension GoNavigation on GoInterface {
         location,
         pathParams: pathParams,
         queryParams: queryParams,
-        extra: extra,
+        params: params,
       );
     }
   }
@@ -629,14 +629,14 @@ extension GoNavigation on GoInterface {
     String name, {
     Map<String, String> pathParams = const <String, String>{},
     Map<String, dynamic> queryParams = const <String, dynamic>{},
-    Object? extra,
+    Map<String, dynamic> params = const <String, dynamic>{},
   }) {
     if (GetPlatform.isWeb) {
       goNamed(
         name,
         pathParams: pathParams,
         queryParams: queryParams,
-        extra: extra,
+        params: params,
       );
       return Future<T>.value(null);
     } else {
@@ -644,7 +644,7 @@ extension GoNavigation on GoInterface {
         name,
         pathParams: pathParams,
         queryParams: queryParams,
-        extra: extra,
+        params: params,
       );
     }
   }
@@ -654,7 +654,7 @@ extension GoNavigation on GoInterface {
     String location, {
     Map<String, dynamic> pathParams = const <String, dynamic>{},
     Map<String, dynamic> queryParams = const <String, dynamic>{},
-    Object? extra,
+    Map<String, dynamic> params = const <String, dynamic>{},
   }) {
     pathParams.forEach((key, value) {
       if (location.contains(":$key")) {
@@ -664,7 +664,7 @@ extension GoNavigation on GoInterface {
     queryParams.forEach((key, value) {
       location = "$location${location.contains("?") ? "&" : "?"}$key=$value";
     });
-    global().go(location, extra: extra);
+    global().go(location, extra: params);
   }
 
   /// Navigate to a named route.
@@ -672,13 +672,13 @@ extension GoNavigation on GoInterface {
     String name, {
     Map<String, String> pathParams = const <String, String>{},
     Map<String, dynamic> queryParams = const <String, dynamic>{},
-    Object? extra,
+    Map<String, dynamic> params = const <String, dynamic>{},
   }) =>
       global().goNamed(
         name,
         pathParameters: pathParams,
         queryParameters: queryParams,
-        extra: extra,
+        extra: params,
       );
 
   /// Push a location onto the page stack.
@@ -686,7 +686,7 @@ extension GoNavigation on GoInterface {
     String location, {
     Map<String, dynamic> pathParams = const <String, dynamic>{},
     Map<String, dynamic> queryParams = const <String, dynamic>{},
-    Object? extra,
+    Map<String, dynamic> params = const <String, dynamic>{},
   }) {
     pathParams.forEach((key, value) {
       if (location.contains(":$key")) {
@@ -696,7 +696,7 @@ extension GoNavigation on GoInterface {
     queryParams.forEach((key, value) {
       location = "$location${location.contains("?") ? "&" : "?"}$key=$value";
     });
-    return global().push<T>(location, extra: extra);
+    return global().push<T>(location, extra: params);
   }
 
   /// Navigate to a named route onto the page stack.
@@ -704,13 +704,13 @@ extension GoNavigation on GoInterface {
     String name, {
     Map<String, String> pathParams = const <String, String>{},
     Map<String, dynamic> queryParams = const <String, dynamic>{},
-    Object? extra,
+    Map<String, dynamic> params = const <String, dynamic>{},
   }) =>
       global().pushNamed<T>(
         name,
         pathParameters: pathParams,
         queryParameters: queryParams,
-        extra: extra,
+        extra: params,
       );
 
   /// Returns `true` if there is more than 1 page on the stack.
