@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 enum PageTransitionType {
+  // 禁用动画
+  disabled,
   // 无动画
   none,
   // 渐变透明

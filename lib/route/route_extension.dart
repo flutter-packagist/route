@@ -13,20 +13,29 @@ GoRoute goRoute({
   String? name,
   Widget? child,
   List<RouteBase>? routes,
-  PageTransitionType transitionType = PageTransitionType.right,
+  PageTransitionType transitionType = PageTransitionType.disabled,
 }) {
+  GoRouterWidgetBuilder? widgetBuilder;
   GoRouterPageBuilder? pageBuilder;
   if (child != null) {
-    pageBuilder = (BuildContext context, GoRouterState state) {
-      routeArguments(state);
-      return routeTransition(transitionType, state, child);
-    };
+    if (transitionType == PageTransitionType.disabled) {
+      widgetBuilder = (BuildContext context, GoRouterState state) {
+        routeArguments(state);
+        return child;
+      };
+    } else {
+      pageBuilder = (BuildContext context, GoRouterState state) {
+        routeArguments(state);
+        return routeTransition(transitionType, state, child);
+      };
+    }
   }
   List<RouteBase>? routeList = const <RouteBase>[];
   if (routes != null && routes.isNotEmpty) routeList = routes;
   return GoRoute(
     name: name,
     path: path,
+    builder: widgetBuilder,
     pageBuilder: pageBuilder,
     routes: routeList,
   );
@@ -57,6 +66,7 @@ Page routeTransition(
   Widget child,
 ) {
   switch (transitionType) {
+    case PageTransitionType.disabled:
     case PageTransitionType.none:
       return NoTransitionPage(
         key: state.pageKey,
