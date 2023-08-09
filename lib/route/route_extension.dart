@@ -20,12 +20,12 @@ GoRoute goRoute({
   if (child != null) {
     if (transitionType == PageTransitionType.disabled) {
       widgetBuilder = (BuildContext context, GoRouterState state) {
-        routeArguments(state);
+        routeArguments(path, name, state);
         return child;
       };
     } else {
       pageBuilder = (BuildContext context, GoRouterState state) {
-        routeArguments(state);
+        routeArguments(path, name, state);
         return routeTransition(transitionType, state, child);
       };
     }
@@ -42,8 +42,12 @@ GoRoute goRoute({
 }
 
 /// 使用GO路由进行参数传递
-void routeArguments(GoRouterState state) {
-  if (state.matchedLocation == Go.currentRoute) return;
+void routeArguments(String path, String? name, GoRouterState state) {
+  if (name != null && name.isNotEmpty) {
+    if (name != Go.currentRoute) return;
+  } else {
+    if (path != Go.currentRoute) return;
+  }
   Map<String, dynamic> args = <String, dynamic>{};
   if (state.pathParameters.isNotEmpty) args.addAll(state.pathParameters);
   if (state.uri.queryParameters.isNotEmpty) {
@@ -55,16 +59,13 @@ void routeArguments(GoRouterState state) {
     args.addAll(state.extra as Map<String, dynamic>);
   }
   Go.routing.args = args;
-  if (args.isEmpty) return;
-  logV("PREVIOUS ROUTE: ${Go.currentRoute}, arguments: $args");
+  logV("CURRENT ROUTE: ${Go.currentRoute}, arguments: $args");
 }
 
 /// 路由切换动画
-Page routeTransition(
-  PageTransitionType transitionType,
-  GoRouterState state,
-  Widget child,
-) {
+Page routeTransition(PageTransitionType transitionType,
+    GoRouterState state,
+    Widget child,) {
   switch (transitionType) {
     case PageTransitionType.disabled:
     case PageTransitionType.none:
