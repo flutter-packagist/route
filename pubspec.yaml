@@ -13,7 +13,10 @@ dependencies:
   get: 4.6.5
   go_router: 10.0.0
   log_wrapper:
-    path: ../log_wrapper
+    version: 1.0.0
+    hosted:
+      name: log_wrapper
+      url: http://192.168.8.75:4000/
 
 dev_dependencies:
   flutter_test:
