@@ -726,8 +726,8 @@ extension GoNavigation on GoInterface {
   /// See also:
   /// * [go] which navigates to the location.
   /// * [push] which pushes the location onto the page stack.
-  void pushReplacement(String location, {Object? extra}) =>
-      global().pushReplacement(location, extra: extra);
+  Future<T?> pushReplacement<T>(String location, {Object? extra}) =>
+      global().pushReplacement<T>(location, extra: extra);
 
   /// Replaces the top-most page of the page stack with the named route w/
   /// optional parameters, e.g. `name='person', params={'fid': 'f2', 'pid':
@@ -736,13 +736,13 @@ extension GoNavigation on GoInterface {
   /// See also:
   /// * [goNamed] which navigates a named route.
   /// * [pushNamed] which pushes a named route onto the page stack.
-  void pushReplacementNamed(
+  Future<T?> pushReplacementNamed<T>(
     String name, {
     Map<String, String> pathParams = const <String, String>{},
     Map<String, dynamic> queryParams = const <String, dynamic>{},
     Object? extra,
   }) =>
-      global().pushReplacementNamed(
+      global().pushReplacementNamed<T>(
         name,
         pathParameters: pathParams,
         queryParameters: queryParams,
@@ -791,7 +791,7 @@ extension GoNavigation on GoInterface {
       }
     } catch (error) {
       if (routing.isDialog == true || routing.isBottomSheet == true) {
-        Navigator.pop(key.currentContext!);
+        Navigator.pop<T>(key.currentContext!);
       }
     }
   }
