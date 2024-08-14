@@ -17,9 +17,9 @@ class GoNavigatorObserver extends NavigatorObserver {
     final newRoute = _RouteData.ofRoute(route);
 
     if (newRoute.isBottomSheet || newRoute.isDialog) {
-      logV("OPEN ${newRoute.name}");
+      logV("OPEN ${newRoute.name} => args: ${routing?.args}");
     } else if (newRoute.isPageRoute) {
-      logV("GOING TO ROUTE ${newRoute.name}");
+      logV("GOING TO ROUTE ${newRoute.name} => args: ${routing?.args}");
     }
 
     RouterReportManager.reportCurrentRoute(route);

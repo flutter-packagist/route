@@ -154,10 +154,8 @@ extension ExtensionDialog on GoInterface {
     double radius = 20.0,
     //   ThemeData themeData,
     List<Widget>? actions,
-
-    // onWillPop Scope
-    WillPopCallback? onWillPop,
-
+    // onPopInvoked Scope
+    PopInvokedCallback? onPopInvoked,
     // the navigator used to push the dialog
     GlobalKey<NavigatorState>? navigatorKey,
   }) {
@@ -205,8 +203,8 @@ extension ExtensionDialog on GoInterface {
           ),
           child: Text(
             textConfirm ?? "Ok",
-            style: TextStyle(
-                color: confirmTextColor ?? theme.colorScheme.background),
+            style:
+                TextStyle(color: confirmTextColor ?? theme.colorScheme.surface),
           ),
           onPressed: () {
             onConfirm?.call();
@@ -248,9 +246,9 @@ extension ExtensionDialog on GoInterface {
     );
 
     return dialog<T>(
-      onWillPop != null
-          ? WillPopScope(
-              onWillPop: onWillPop,
+      onPopInvoked != null
+          ? PopScope(
+              onPopInvoked: onPopInvoked,
               child: baseAlertDialog,
             )
           : baseAlertDialog,
@@ -594,12 +592,17 @@ extension GoNavigation on GoInterface {
     String name, {
     Map<String, String> pathParams = const <String, String>{},
     Map<String, dynamic> queryParams = const <String, dynamic>{},
-  }) =>
-      global().namedLocation(
-        name,
-        pathParameters: pathParams,
-        queryParameters: queryParams,
-      );
+  }) {
+    Map<String, dynamic> args = <String, dynamic>{};
+    if (pathParams.isNotEmpty) args.addAll(pathParams);
+    if (queryParams.isNotEmpty) args.addAll(queryParams);
+    routing.args = args;
+    return global().namedLocation(
+      name,
+      pathParameters: pathParams,
+      queryParameters: queryParams,
+    );
+  }
 
   Future<T?> to<T>(
     String location, {
@@ -607,6 +610,11 @@ extension GoNavigation on GoInterface {
     Map<String, dynamic> queryParams = const <String, dynamic>{},
     Map<String, dynamic> params = const <String, dynamic>{},
   }) {
+    Map<String, dynamic> args = <String, dynamic>{};
+    if (pathParams.isNotEmpty) args.addAll(pathParams);
+    if (queryParams.isNotEmpty) args.addAll(queryParams);
+    if (params.isNotEmpty) args.addAll(params);
+    routing.args = args;
     if (GetPlatform.isWeb) {
       go(
         location,
@@ -631,6 +639,11 @@ extension GoNavigation on GoInterface {
     Map<String, dynamic> queryParams = const <String, dynamic>{},
     Map<String, dynamic> params = const <String, dynamic>{},
   }) {
+    Map<String, dynamic> args = <String, dynamic>{};
+    if (pathParams.isNotEmpty) args.addAll(pathParams);
+    if (queryParams.isNotEmpty) args.addAll(queryParams);
+    if (params.isNotEmpty) args.addAll(params);
+    routing.args = args;
     if (GetPlatform.isWeb) {
       goNamed(
         name,
@@ -656,6 +669,11 @@ extension GoNavigation on GoInterface {
     Map<String, dynamic> queryParams = const <String, dynamic>{},
     Map<String, dynamic> params = const <String, dynamic>{},
   }) {
+    Map<String, dynamic> args = <String, dynamic>{};
+    if (pathParams.isNotEmpty) args.addAll(pathParams);
+    if (queryParams.isNotEmpty) args.addAll(queryParams);
+    if (params.isNotEmpty) args.addAll(params);
+    routing.args = args;
     pathParams.forEach((key, value) {
       if (location.contains(":$key")) {
         location = location.replaceAll(":$key", value.toString());
@@ -673,13 +691,19 @@ extension GoNavigation on GoInterface {
     Map<String, String> pathParams = const <String, String>{},
     Map<String, dynamic> queryParams = const <String, dynamic>{},
     Map<String, dynamic> params = const <String, dynamic>{},
-  }) =>
-      global().goNamed(
-        name,
-        pathParameters: pathParams,
-        queryParameters: queryParams,
-        extra: params,
-      );
+  }) {
+    Map<String, dynamic> args = <String, dynamic>{};
+    if (pathParams.isNotEmpty) args.addAll(pathParams);
+    if (queryParams.isNotEmpty) args.addAll(queryParams);
+    if (params.isNotEmpty) args.addAll(params);
+    routing.args = args;
+    global().goNamed(
+      name,
+      pathParameters: pathParams,
+      queryParameters: queryParams,
+      extra: params,
+    );
+  }
 
   /// Push a location onto the page stack.
   Future<T?> push<T>(
@@ -688,6 +712,11 @@ extension GoNavigation on GoInterface {
     Map<String, dynamic> queryParams = const <String, dynamic>{},
     Map<String, dynamic> params = const <String, dynamic>{},
   }) {
+    Map<String, dynamic> args = <String, dynamic>{};
+    if (pathParams.isNotEmpty) args.addAll(pathParams);
+    if (queryParams.isNotEmpty) args.addAll(queryParams);
+    if (params.isNotEmpty) args.addAll(params);
+    routing.args = args;
     pathParams.forEach((key, value) {
       if (location.contains(":$key")) {
         location = location.replaceAll(":$key", value.toString());
@@ -705,13 +734,19 @@ extension GoNavigation on GoInterface {
     Map<String, String> pathParams = const <String, String>{},
     Map<String, dynamic> queryParams = const <String, dynamic>{},
     Map<String, dynamic> params = const <String, dynamic>{},
-  }) =>
-      global().pushNamed<T>(
-        name,
-        pathParameters: pathParams,
-        queryParameters: queryParams,
-        extra: params,
-      );
+  }) {
+    Map<String, dynamic> args = <String, dynamic>{};
+    if (pathParams.isNotEmpty) args.addAll(pathParams);
+    if (queryParams.isNotEmpty) args.addAll(queryParams);
+    if (params.isNotEmpty) args.addAll(params);
+    routing.args = args;
+    return global().pushNamed<T>(
+      name,
+      pathParameters: pathParams,
+      queryParameters: queryParams,
+      extra: params,
+    );
+  }
 
   /// Returns `true` if there is more than 1 page on the stack.
   bool canPop() => global().canPop();
@@ -726,8 +761,10 @@ extension GoNavigation on GoInterface {
   /// See also:
   /// * [go] which navigates to the location.
   /// * [push] which pushes the location onto the page stack.
-  Future<T?> pushReplacement<T>(String location, {Object? extra}) =>
-      global().pushReplacement<T>(location, extra: extra);
+  Future<T?> pushReplacement<T>(String location, {Object? extra}) {
+    routing.args = extra;
+    return global().pushReplacement<T>(location, extra: extra);
+  }
 
   /// Replaces the top-most page of the page stack with the named route w/
   /// optional parameters, e.g. `name='person', params={'fid': 'f2', 'pid':
@@ -741,13 +778,15 @@ extension GoNavigation on GoInterface {
     Map<String, String> pathParams = const <String, String>{},
     Map<String, dynamic> queryParams = const <String, dynamic>{},
     Object? extra,
-  }) =>
-      global().pushReplacementNamed<T>(
-        name,
-        pathParameters: pathParams,
-        queryParameters: queryParams,
-        extra: extra,
-      );
+  }) {
+    routing.args = extra;
+    return global().pushReplacementNamed<T>(
+      name,
+      pathParameters: pathParams,
+      queryParameters: queryParams,
+      extra: extra,
+    );
+  }
 
   /// **Navigation.popUntil()** shortcut.<br><br>
   ///
