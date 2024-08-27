@@ -20,6 +20,10 @@ extension ExtensionBottomSheet on GoInterface {
     Duration? enterBottomSheetDuration,
     Duration? exitBottomSheetDuration,
   }) {
+    if (settings?.arguments != null) {
+      routing.args = settings!.arguments;
+      routingQueue.add(routing.copyWith());
+    }
     return Navigator.of(overlayContext!, rootNavigator: useRootNavigator)
         .push(GetModalBottomSheetRoute<T>(
       builder: (_) => bottomSheet,
@@ -69,6 +73,10 @@ extension ExtensionDialog on GoInterface {
 
     //  final theme = Theme.of(context, shadowThemeOnly: true);
     final theme = Theme.of(context!);
+    if (arguments != null) {
+      routing.args = arguments;
+      routingQueue.add(routing.copyWith());
+    }
     return generalDialog<T>(
       pageBuilder: (buildContext, animation, secondaryAnimation) {
         final pageChild = widget;
@@ -111,6 +119,10 @@ extension ExtensionDialog on GoInterface {
     RouteSettings? routeSettings,
   }) {
     assert(!barrierDismissible || barrierLabel != null);
+    if (routeSettings?.arguments != null) {
+      routing.args = routeSettings!.arguments;
+      routingQueue.add(routing.copyWith());
+    }
     final nav = navigatorKey?.currentState ??
         Navigator.of(overlayContext!,
             rootNavigator:
@@ -510,6 +522,8 @@ extension GoNavigation on GoInterface {
 
   Routing get routing => goSetting.routing;
 
+  Queue<Routing> get routingQueue => goSetting.routingQueue;
+
   GlobalKey<NavigatorState> get key => goSetting.key;
 
   /// give access to currentContext
@@ -597,6 +611,7 @@ extension GoNavigation on GoInterface {
     if (pathParams.isNotEmpty) args.addAll(pathParams);
     if (queryParams.isNotEmpty) args.addAll(queryParams);
     routing.args = args;
+    routingQueue.add(routing.copyWith());
     return global().namedLocation(
       name,
       pathParameters: pathParams,
@@ -610,11 +625,6 @@ extension GoNavigation on GoInterface {
     Map<String, dynamic> queryParams = const <String, dynamic>{},
     Map<String, dynamic> params = const <String, dynamic>{},
   }) {
-    Map<String, dynamic> args = <String, dynamic>{};
-    if (pathParams.isNotEmpty) args.addAll(pathParams);
-    if (queryParams.isNotEmpty) args.addAll(queryParams);
-    if (params.isNotEmpty) args.addAll(params);
-    routing.args = args;
     if (GetPlatform.isWeb) {
       go(
         location,
@@ -639,11 +649,6 @@ extension GoNavigation on GoInterface {
     Map<String, dynamic> queryParams = const <String, dynamic>{},
     Map<String, dynamic> params = const <String, dynamic>{},
   }) {
-    Map<String, dynamic> args = <String, dynamic>{};
-    if (pathParams.isNotEmpty) args.addAll(pathParams);
-    if (queryParams.isNotEmpty) args.addAll(queryParams);
-    if (params.isNotEmpty) args.addAll(params);
-    routing.args = args;
     if (GetPlatform.isWeb) {
       goNamed(
         name,
@@ -674,6 +679,7 @@ extension GoNavigation on GoInterface {
     if (queryParams.isNotEmpty) args.addAll(queryParams);
     if (params.isNotEmpty) args.addAll(params);
     routing.args = args;
+    routingQueue.add(routing.copyWith());
     pathParams.forEach((key, value) {
       if (location.contains(":$key")) {
         location = location.replaceAll(":$key", value.toString());
@@ -697,6 +703,7 @@ extension GoNavigation on GoInterface {
     if (queryParams.isNotEmpty) args.addAll(queryParams);
     if (params.isNotEmpty) args.addAll(params);
     routing.args = args;
+    routingQueue.add(routing.copyWith());
     global().goNamed(
       name,
       pathParameters: pathParams,
@@ -717,6 +724,7 @@ extension GoNavigation on GoInterface {
     if (queryParams.isNotEmpty) args.addAll(queryParams);
     if (params.isNotEmpty) args.addAll(params);
     routing.args = args;
+    routingQueue.add(routing.copyWith());
     pathParams.forEach((key, value) {
       if (location.contains(":$key")) {
         location = location.replaceAll(":$key", value.toString());
@@ -740,6 +748,7 @@ extension GoNavigation on GoInterface {
     if (queryParams.isNotEmpty) args.addAll(queryParams);
     if (params.isNotEmpty) args.addAll(params);
     routing.args = args;
+    routingQueue.add(routing.copyWith());
     return global().pushNamed<T>(
       name,
       pathParameters: pathParams,
@@ -763,6 +772,8 @@ extension GoNavigation on GoInterface {
   /// * [push] which pushes the location onto the page stack.
   Future<T?> pushReplacement<T>(String location, {Object? extra}) {
     routing.args = extra;
+    routingQueue.removeLast();
+    routingQueue.add(routing.copyWith());
     return global().pushReplacement<T>(location, extra: extra);
   }
 
@@ -779,7 +790,15 @@ extension GoNavigation on GoInterface {
     Map<String, dynamic> queryParams = const <String, dynamic>{},
     Object? extra,
   }) {
-    routing.args = extra;
+    Map<String, dynamic> args = <String, dynamic>{};
+    if (pathParams.isNotEmpty) args.addAll(pathParams);
+    if (queryParams.isNotEmpty) args.addAll(queryParams);
+    if (extra != null && extra is Map) {
+      args.addAll(extra as Map<String, dynamic>);
+    }
+    routing.args = args;
+    routingQueue.removeLast();
+    routingQueue.add(routing.copyWith());
     return global().pushReplacementNamed<T>(
       name,
       pathParameters: pathParams,
@@ -806,6 +825,17 @@ extension GoNavigation on GoInterface {
     bool canPop = true,
     int? id,
   }) {
+    routingQueue.removeLast();
+    routing.update((value) {
+      value.current = routingQueue.last.current;
+      value.previous = routingQueue.last.previous;
+      value.args = routingQueue.last.args;
+      value.removed = routingQueue.last.removed;
+      value.route = routingQueue.last.route;
+      value.isBack = true;
+      value.isBottomSheet = routingQueue.last.isBottomSheet;
+      value.isDialog = routingQueue.last.isDialog;
+    });
     if (isSnackBarOpen && !closeOverlays) {
       closeCurrentSnackBar();
       return;
@@ -851,6 +881,13 @@ extension GoNavigation on GoInterface {
   void popUntil(RoutePredicate predicate, {int? id}) {
     // if (key.currentState.mounted) // add this if appear problems on future with route navigate
     // when widget don't mounted
+    while (routingQueue.isNotEmpty) {
+      if (routing.route == null || !predicate(routing.route!)) {
+        routingQueue.removeLast();
+      } else {
+        break;
+      }
+    }
     return key.currentState?.popUntil(predicate);
   }
 }

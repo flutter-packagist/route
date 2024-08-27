@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get_core/get_core.dart';
@@ -15,6 +17,7 @@ part 'go_navigator_extension.dart';
 class GoSetting {
   final key = GlobalKey<NavigatorState>(debugLabel: 'Key Created by default');
   final routing = Routing();
+  final Queue<Routing> routingQueue = Queue<Routing>();
 }
 
 abstract class GoInterface {}

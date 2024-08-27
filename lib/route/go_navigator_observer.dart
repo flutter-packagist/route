@@ -160,6 +160,26 @@ class Routing {
   void update(void Function(Routing value) fn) {
     fn(this);
   }
+
+  Routing copyWith({Routing? route}) {
+    return Routing(
+      current: route?.current ?? this.current,
+      previous: route?.previous ?? this.previous,
+      args: route?.args ?? this.args,
+      removed: route?.removed ?? this.removed,
+      route: route?.route ?? this.route,
+      isBack: route?.isBack ?? this.isBack,
+      isBottomSheet: route?.isBottomSheet ?? this.isBottomSheet,
+      isDialog: route?.isDialog ?? this.isDialog,
+    );
+  }
+
+  @override
+  String toString() {
+    return "[ Routing: current: $current, previous: $previous, args: $args, "
+        "removed: $removed, route: $route, isBack: $isBack, "
+        "isBottomSheet: $isBottomSheet, isDialog: $isDialog ]";
+  }
 }
 
 /// This is basically a util for rules about 'what a route is'
