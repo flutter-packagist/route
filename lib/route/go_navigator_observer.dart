@@ -4,6 +4,7 @@ import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:get/get_navigation/src/router_report.dart';
 import 'package:go_router/go_router.dart';
 import 'package:log_wrapper/log/log.dart';
+import 'package:route/route/go_navigator.dart';
 
 /// The Navigator observer.
 class GoNavigatorObserver extends NavigatorObserver {
@@ -40,6 +41,10 @@ class GoNavigatorObserver extends NavigatorObserver {
           newRoute.isBottomSheet ? true : value.isBottomSheet ?? false;
       value.isDialog = newRoute.isDialog ? true : value.isDialog ?? false;
     });
+
+    if (routing != null) {
+      Go.routingQueue.add(routing!.copyWith());
+    }
   }
 
   @override
@@ -58,6 +63,10 @@ class GoNavigatorObserver extends NavigatorObserver {
       RouterReportManager.reportCurrentRoute(previousRoute);
     }
 
+    if (Go.routingQueue.isNotEmpty) {
+      Go.routingQueue.removeLast();
+    }
+
     // Here we use a 'inverse didPush set', meaning that we use
     // previous route instead of 'route' because this is
     // a 'inverse push'
@@ -68,6 +77,11 @@ class GoNavigatorObserver extends NavigatorObserver {
         value.previous = newRoute.name ?? '';
       } else if (value.previous.isNotEmpty) {
         value.current = value.previous;
+      }
+
+      if (Go.routingQueue.isNotEmpty) {
+        value.args = Go.routingQueue.last.args;
+        value.previous = Go.routingQueue.last.previous;
       }
 
       value.route = previousRoute;
@@ -98,6 +112,10 @@ class GoNavigatorObserver extends NavigatorObserver {
 
     if (route.settings is MaterialPage) {
       RouterReportManager.reportRouteWillDispose(route);
+    }
+
+    if (routing != null && Go.routingQueue.isNotEmpty) {
+      Go.routingQueue.removeLast();
     }
   }
 
@@ -132,6 +150,11 @@ class GoNavigatorObserver extends NavigatorObserver {
 
     if (oldRoute?.settings is MaterialPage) {
       RouterReportManager.reportRouteWillDispose(oldRoute!);
+    }
+
+    if (routing != null && Go.routingQueue.isNotEmpty) {
+      Go.routingQueue.removeLast();
+      Go.routingQueue.add(routing!.copyWith());
     }
   }
 }
