@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-enum PageTransitionType {
+enum PageTransition {
   // 禁用动画
   disabled,
   // 无动画
@@ -28,22 +28,26 @@ enum PageTransitionType {
   leftFade,
 }
 
-
 class FadeTransitionPage<T> extends CustomTransitionPage<T> {
   /// Constructor for a page with no transition functionality.
   const FadeTransitionPage({
     required super.child,
+    super.transitionDuration = const Duration(milliseconds: 350),
+    super.reverseTransitionDuration = const Duration(milliseconds: 250),
+    super.maintainState = true,
+    super.fullscreenDialog = false,
+    super.opaque = true,
+    super.barrierDismissible = false,
+    super.barrierColor,
+    super.barrierLabel,
+    super.key,
     super.name,
     super.arguments,
     super.restorationId,
-    super.key,
-  }) : super(
-    transitionsBuilder: _transitionsBuilder,
-    transitionDuration: const Duration(milliseconds: 200),
-    reverseTransitionDuration: const Duration(milliseconds: 200),
-  );
+  }) : super(transitionsBuilder: _transitionsBuilder);
 
-  static Widget _transitionsBuilder(BuildContext context,
+  static Widget _transitionsBuilder(
+      BuildContext context,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -55,17 +59,22 @@ class ScaleTransitionPage<T> extends CustomTransitionPage<T> {
   /// Constructor for a page with no transition functionality.
   const ScaleTransitionPage({
     required super.child,
+    super.transitionDuration = const Duration(milliseconds: 350),
+    super.reverseTransitionDuration = const Duration(milliseconds: 250),
+    super.maintainState = true,
+    super.fullscreenDialog = false,
+    super.opaque = true,
+    super.barrierDismissible = false,
+    super.barrierColor,
+    super.barrierLabel,
+    super.key,
     super.name,
     super.arguments,
     super.restorationId,
-    super.key,
-  }) : super(
-    transitionsBuilder: _transitionsBuilder,
-    transitionDuration: const Duration(milliseconds: 300),
-    reverseTransitionDuration: const Duration(milliseconds: 300),
-  );
+  }) : super(transitionsBuilder: _transitionsBuilder);
 
-  static Widget _transitionsBuilder(BuildContext context,
+  static Widget _transitionsBuilder(
+      BuildContext context,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -87,17 +96,22 @@ class RotateTransitionPage<T> extends CustomTransitionPage<T> {
   /// Constructor for a page with no transition functionality.
   const RotateTransitionPage({
     required super.child,
+    super.transitionDuration = const Duration(milliseconds: 350),
+    super.reverseTransitionDuration = const Duration(milliseconds: 250),
+    super.maintainState = true,
+    super.fullscreenDialog = false,
+    super.opaque = true,
+    super.barrierDismissible = false,
+    super.barrierColor,
+    super.barrierLabel,
+    super.key,
     super.name,
     super.arguments,
     super.restorationId,
-    super.key,
-  }) : super(
-    transitionsBuilder: _transitionsBuilder,
-    transitionDuration: const Duration(milliseconds: 300),
-    reverseTransitionDuration: const Duration(milliseconds: 300),
-  );
+  }) : super(transitionsBuilder: _transitionsBuilder);
 
-  static Widget _transitionsBuilder(BuildContext context,
+  static Widget _transitionsBuilder(
+      BuildContext context,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -120,17 +134,22 @@ class SizeTransitionPage<T> extends CustomTransitionPage<T> {
   /// Constructor for a page with no transition functionality.
   const SizeTransitionPage({
     required super.child,
+    super.transitionDuration = const Duration(milliseconds: 350),
+    super.reverseTransitionDuration = const Duration(milliseconds: 250),
+    super.maintainState = true,
+    super.fullscreenDialog = false,
+    super.opaque = true,
+    super.barrierDismissible = false,
+    super.barrierColor,
+    super.barrierLabel,
+    super.key,
     super.name,
     super.arguments,
     super.restorationId,
-    super.key,
-  }) : super(
-    transitionsBuilder: _transitionsBuilder,
-    transitionDuration: const Duration(milliseconds: 200),
-    reverseTransitionDuration: const Duration(milliseconds: 200),
-  );
+  }) : super(transitionsBuilder: _transitionsBuilder);
 
-  static Widget _transitionsBuilder(BuildContext context,
+  static Widget _transitionsBuilder(
+      BuildContext context,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -151,17 +170,22 @@ class RightToLeftTransitionPage<T> extends CustomTransitionPage<T> {
   /// Constructor for a page with no transition functionality.
   const RightToLeftTransitionPage({
     required super.child,
+    super.transitionDuration = const Duration(milliseconds: 350),
+    super.reverseTransitionDuration = const Duration(milliseconds: 250),
+    super.maintainState = true,
+    super.fullscreenDialog = false,
+    super.opaque = true,
+    super.barrierDismissible = false,
+    super.barrierColor,
+    super.barrierLabel,
+    super.key,
     super.name,
     super.arguments,
     super.restorationId,
-    super.key,
-  }) : super(
-    transitionsBuilder: _transitionsBuilder,
-    transitionDuration: const Duration(milliseconds: 200),
-    reverseTransitionDuration: const Duration(milliseconds: 200),
-  );
+  }) : super(transitionsBuilder: _transitionsBuilder);
 
-  static Widget _transitionsBuilder(BuildContext context,
+  static Widget _transitionsBuilder(
+      BuildContext context,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -179,17 +203,22 @@ class LeftToRightTransitionPage<T> extends CustomTransitionPage<T> {
   /// Constructor for a page with no transition functionality.
   const LeftToRightTransitionPage({
     required super.child,
+    super.transitionDuration = const Duration(milliseconds: 350),
+    super.reverseTransitionDuration = const Duration(milliseconds: 250),
+    super.maintainState = true,
+    super.fullscreenDialog = false,
+    super.opaque = true,
+    super.barrierDismissible = false,
+    super.barrierColor,
+    super.barrierLabel,
+    super.key,
     super.name,
     super.arguments,
     super.restorationId,
-    super.key,
-  }) : super(
-    transitionsBuilder: _transitionsBuilder,
-    transitionDuration: const Duration(milliseconds: 200),
-    reverseTransitionDuration: const Duration(milliseconds: 200),
-  );
+  }) : super(transitionsBuilder: _transitionsBuilder);
 
-  static Widget _transitionsBuilder(BuildContext context,
+  static Widget _transitionsBuilder(
+      BuildContext context,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -207,17 +236,22 @@ class TopToBottomTransitionPage<T> extends CustomTransitionPage<T> {
   /// Constructor for a page with no transition functionality.
   const TopToBottomTransitionPage({
     required super.child,
+    super.transitionDuration = const Duration(milliseconds: 350),
+    super.reverseTransitionDuration = const Duration(milliseconds: 250),
+    super.maintainState = true,
+    super.fullscreenDialog = false,
+    super.opaque = true,
+    super.barrierDismissible = false,
+    super.barrierColor,
+    super.barrierLabel,
+    super.key,
     super.name,
     super.arguments,
     super.restorationId,
-    super.key,
-  }) : super(
-    transitionsBuilder: _transitionsBuilder,
-    transitionDuration: const Duration(milliseconds: 200),
-    reverseTransitionDuration: const Duration(milliseconds: 200),
-  );
+  }) : super(transitionsBuilder: _transitionsBuilder);
 
-  static Widget _transitionsBuilder(BuildContext context,
+  static Widget _transitionsBuilder(
+      BuildContext context,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -235,17 +269,22 @@ class BottomToTopTransitionPage<T> extends CustomTransitionPage<T> {
   /// Constructor for a page with no transition functionality.
   const BottomToTopTransitionPage({
     required super.child,
+    super.transitionDuration = const Duration(milliseconds: 350),
+    super.reverseTransitionDuration = const Duration(milliseconds: 250),
+    super.maintainState = true,
+    super.fullscreenDialog = false,
+    super.opaque = true,
+    super.barrierDismissible = false,
+    super.barrierColor,
+    super.barrierLabel,
+    super.key,
     super.name,
     super.arguments,
     super.restorationId,
-    super.key,
-  }) : super(
-    transitionsBuilder: _transitionsBuilder,
-    transitionDuration: const Duration(milliseconds: 200),
-    reverseTransitionDuration: const Duration(milliseconds: 200),
-  );
+  }) : super(transitionsBuilder: _transitionsBuilder);
 
-  static Widget _transitionsBuilder(BuildContext context,
+  static Widget _transitionsBuilder(
+      BuildContext context,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -263,17 +302,22 @@ class RightToLeftWithFadeTransitionPage<T> extends CustomTransitionPage<T> {
   /// Constructor for a page with no transition functionality.
   const RightToLeftWithFadeTransitionPage({
     required super.child,
+    super.transitionDuration = const Duration(milliseconds: 350),
+    super.reverseTransitionDuration = const Duration(milliseconds: 250),
+    super.maintainState = true,
+    super.fullscreenDialog = false,
+    super.opaque = true,
+    super.barrierDismissible = false,
+    super.barrierColor,
+    super.barrierLabel,
+    super.key,
     super.name,
     super.arguments,
     super.restorationId,
-    super.key,
-  }) : super(
-    transitionsBuilder: _transitionsBuilder,
-    transitionDuration: const Duration(milliseconds: 200),
-    reverseTransitionDuration: const Duration(milliseconds: 250),
-  );
+  }) : super(transitionsBuilder: _transitionsBuilder);
 
-  static Widget _transitionsBuilder(BuildContext context,
+  static Widget _transitionsBuilder(
+      BuildContext context,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
@@ -300,17 +344,22 @@ class LeftToRightWithFadeTransitionPage<T> extends CustomTransitionPage<T> {
   /// Constructor for a page with no transition functionality.
   const LeftToRightWithFadeTransitionPage({
     required super.child,
+    super.transitionDuration = const Duration(milliseconds: 350),
+    super.reverseTransitionDuration = const Duration(milliseconds: 250),
+    super.maintainState = true,
+    super.fullscreenDialog = false,
+    super.opaque = true,
+    super.barrierDismissible = false,
+    super.barrierColor,
+    super.barrierLabel,
+    super.key,
     super.name,
     super.arguments,
     super.restorationId,
-    super.key,
-  }) : super(
-    transitionsBuilder: _transitionsBuilder,
-    transitionDuration: const Duration(milliseconds: 200),
-    reverseTransitionDuration: const Duration(milliseconds: 250),
-  );
+  }) : super(transitionsBuilder: _transitionsBuilder);
 
-  static Widget _transitionsBuilder(BuildContext context,
+  static Widget _transitionsBuilder(
+      BuildContext context,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
