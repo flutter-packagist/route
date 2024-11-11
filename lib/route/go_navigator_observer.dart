@@ -4,7 +4,7 @@ import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:get/get_navigation/src/router_report.dart';
 import 'package:go_router/go_router.dart';
 import 'package:log_wrapper/log/log.dart';
-import 'package:route/route/go_navigator.dart';
+import 'package:packagist_route/route/go_navigator.dart';
 
 /// The Navigator observer.
 class GoNavigatorObserver extends NavigatorObserver {

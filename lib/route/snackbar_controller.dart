@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:get/get_utils/src/queue/get_queue.dart';
-import 'package:route/route.dart';
+import 'package:packagist_route/route.dart';
 
 class SnackbarController {
   static final _snackBarQueue = _SnackBarQueue();
