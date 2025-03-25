@@ -12,7 +12,6 @@ extension ExtensionBottomSheet on GoInterface {
     Clip? clipBehavior,
     Color? barrierColor,
     bool? ignoreSafeArea,
-    bool isScrollControlled = false,
     bool useRootNavigator = false,
     bool isDismissible = true,
     bool enableDrag = true,
@@ -29,8 +28,6 @@ extension ExtensionBottomSheet on GoInterface {
       isPersistent: persistent,
       // theme: Theme.of(key.currentContext, shadowThemeOnly: true),
       theme: Theme.of(key.currentContext!),
-      isScrollControlled: isScrollControlled,
-
       barrierLabel: MaterialLocalizations.of(key.currentContext!)
           .modalBarrierDismissLabel,
 
