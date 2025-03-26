@@ -1,18 +1,17 @@
 name: packagist_route
 description: Wrapper for go_router.
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/flutter-packagist/route
 
 environment:
-  sdk: '>=2.18.4 <4.0.0'
-  flutter: ">=1.17.0"
+  sdk: '>=3.3.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  get: ^4.6.6
-  go_router: ^14.2.3
-  log_wrapper: ^1.0.3
+  get: ^4.7.2
+  go_router: ^14.8.1
+  log_wrapper: ^1.0.4
 
 dev_dependencies:
   flutter_test:

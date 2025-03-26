@@ -12,6 +12,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.elevation,
     this.shape,
     this.removeTop = true,
+    this.safeAreaBottom = true,
     this.clipBehavior,
     this.modalBarrierColor,
     this.isDismissible = true,
@@ -40,6 +41,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
 
   // remove safearea from top
   final bool removeTop;
+  final bool safeAreaBottom;
 
   @override
   Duration get transitionDuration => const Duration(milliseconds: 700);
@@ -95,6 +97,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
           shape: shape,
           clipBehavior: clipBehavior,
           enableDrag: enableDrag,
+          safeAreaBottom: safeAreaBottom,
         ),
       ),
     );
@@ -113,6 +116,7 @@ class _GetModalBottomSheet<T> extends StatefulWidget {
     this.clipBehavior,
     this.enableDrag = true,
     this.isPersistent = false,
+    this.safeAreaBottom = true,
   }) : super(key: key);
   final bool isPersistent;
   final GetModalBottomSheetRoute<T>? route;
@@ -121,6 +125,7 @@ class _GetModalBottomSheet<T> extends StatefulWidget {
   final ShapeBorder? shape;
   final Clip? clipBehavior;
   final bool enableDrag;
+  final bool safeAreaBottom;
 
   @override
   _GetModalBottomSheetState<T> createState() => _GetModalBottomSheetState<T>();
@@ -152,16 +157,19 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
         final animationValue = mediaQuery.accessibleNavigation
             ? 1.0
             : widget.route!.animation!.value;
-        Widget builder = AnimatedPadding(
-          padding: EdgeInsets.only(
-            bottom: mediaQuery.viewInsets.bottom > 100
-                ? 0
-                : mediaQuery.padding.bottom,
-          ),
-          curve: Curves.decelerate,
-          duration: Duration(milliseconds: 1),
-          child: widget.route!.builder!(context),
-        );
+        Widget builder = widget.route!.builder!(context);
+        if (widget.safeAreaBottom) {
+          builder = AnimatedPadding(
+            padding: EdgeInsets.only(
+              bottom: mediaQuery.viewInsets.bottom > 100
+                  ? 0
+                  : mediaQuery.padding.bottom,
+            ),
+            curve: Curves.decelerate,
+            duration: Duration(milliseconds: 1),
+            child: widget.route!.builder!(context),
+          );
+        }
         return Semantics(
           scopesRoute: true,
           namesRoute: true,
