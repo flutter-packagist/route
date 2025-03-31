@@ -20,6 +20,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     RouteSettings? settings,
     this.enterBottomSheetDuration = const Duration(milliseconds: 250),
     this.exitBottomSheetDuration = const Duration(milliseconds: 200),
+    this.keyboardSafe = true,
   }) : super(settings: settings) {
     RouterReportManager.reportCurrentRoute(this);
   }
@@ -42,6 +43,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   // remove safearea from top
   final bool removeTop;
   final bool safeAreaBottom;
+  final bool keyboardSafe;
 
   @override
   Duration get transitionDuration => const Duration(milliseconds: 700);
@@ -85,7 +87,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
       removeTop: removeTop,
       child: Padding(
         padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
+          bottom: keyboardSafe ? MediaQuery.of(context).viewInsets.bottom : 0,
         ),
         child: _GetModalBottomSheet<T>(
           route: this,

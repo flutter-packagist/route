@@ -19,6 +19,7 @@ extension ExtensionBottomSheet on GoInterface {
     RouteSettings? settings,
     Duration? enterBottomSheetDuration,
     Duration? exitBottomSheetDuration,
+    bool keyboardSafe = true,
   }) {
     if (settings?.arguments != null) {
       routing.args = settings!.arguments;
@@ -46,6 +47,7 @@ extension ExtensionBottomSheet on GoInterface {
           enterBottomSheetDuration ?? const Duration(milliseconds: 250),
       exitBottomSheetDuration:
           exitBottomSheetDuration ?? const Duration(milliseconds: 200),
+      keyboardSafe: keyboardSafe,
     ));
   }
 }
