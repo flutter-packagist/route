@@ -1,3 +1,8 @@
+## 1.0.4
+
+* feat: 升级依赖库。
+* feat: 最低 Dart SDK 升级至 3.9。
+
 ## 1.0.3
 
 * feat: bottom sheet 添加`keyboardSafe`参数
